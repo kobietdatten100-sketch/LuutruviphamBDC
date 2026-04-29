@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<title>Military Admin </title>
+<title>Hệ thống kỷ luật quân nhân</title>
 
 <style>
 body{
@@ -10,61 +10,35 @@ body{
     font-family:Arial;
     background:#0b1220;
     color:white;
-    display:flex;
 }
 
-/* SIDEBAR */
-.sidebar{
-    width:240px;
-    background:#111827;
-    height:100vh;
+.header{
+    background:#020617;
     padding:15px;
+    text-align:center;
+    font-weight:bold;
+    border-bottom:1px solid #1e293b;
 }
 
-.sidebar h2{
-    color:#38bdf8;
-    font-size:16px;
-}
-
-.sidebar button{
-    width:100%;
-    padding:10px;
-    margin-top:10px;
-    background:#1f2937;
-    color:white;
-    border:none;
-    border-radius:6px;
-    cursor:pointer;
-}
-
-.sidebar button:hover{
-    background:#334155;
-}
-
-/* MAIN */
-.main{
-    flex:1;
+.container{
     padding:20px;
 }
-
-.page{display:none;}
-.active{display:block;}
 
 .card{
     background:#1e293b;
     padding:15px;
     border-radius:10px;
-    margin-bottom:10px;
+    margin-bottom:15px;
 }
 
-input, button{
+input,button{
     padding:10px;
     margin:5px;
     border:none;
     border-radius:6px;
 }
 
-input{width:220px;}
+input{width:180px;}
 
 .table{
     width:100%;
@@ -77,226 +51,115 @@ input{width:220px;}
     text-align:center;
 }
 
-.bad{color:red;font-weight:bold;}
-.good{color:limegreen;font-weight:bold;}
-.warn{color:orange;font-weight:bold;}
+.bad{color:red;}
+.warn{color:orange;}
+.good{color:limegreen;}
 </style>
 </head>
 
 <body>
 
-<!-- SIDEBAR -->
-<div class="sidebar">
-    <h2>lưu trữ vi phạm</h2>
-
-    <button onclick="showPage('login')">Login Admin</button>
-    <button onclick="showPage('dashboard')">Dashboard</button>
-    <button onclick="showPage('officer')">Sĩ quan</button>
-    <button onclick="showPage('discipline')">Kỷ luật</button>
-    <button onclick="showPage('stats')">Thống kê</button>
+<div class="header">
+HỆ THỐNG QUẢN LÝ KỶ LUẬT QUÂN NHÂN
 </div>
 
-<!-- MAIN -->
-<div class="main">
+<div class="container">
 
-<!-- LOGIN -->
-<div id="login" class="page active">
-    <h2>Đăng nhập Administrator</h2>
+<div class="card">
+<h3>Thêm kỷ luật</h3>
 
-    <div class="card">
-        <input type="password" id="pass" placeholder="Mật khẩu admin">
-        <button onclick="login()">Đăng nhập</button>
-        <p id="loginStatus"></p>
-    </div>
+<input id="name" placeholder="Họ tên">
+<input id="rank" placeholder="Quân hàm">
+<input id="level" placeholder="Mức kỷ luật (0-10)">
+<br>
+<input id="error" placeholder="Lỗi vi phạm">
+<input id="penalty" placeholder="Hình thức xử phạt">
+<br>
+<label>Từ:</label>
+<input type="date" id="start">
+<label>Đến:</label>
+<input type="date" id="end">
+<br>
+<button onclick="add()">Thêm</button>
 </div>
 
-<!-- DASHBOARD -->
-<div id="dashboard" class="page">
-    <h2>Dashboard</h2>
+<div class="card">
+<h3>Danh sách sĩ quan</h3>
 
-    <div class="card">
-        <p>Trạng thái: <span id="adminStatus">CHƯA ĐĂNG NHẬP</span></p>
-        <p>Tổng Quân nhân: <span id="total"></span></p>
-        <p>Tổng kỷ luật: <span id="totalViolations"></span></p>
-    </div>
-</div>
+<table class="table">
+<thead>
+<tr>
+<th>Tên</th>
+<th>Quân hàm</th>
+<th>Kỷ luật</th>
+<th>Lỗi</th>
+<th>Hình phạt</th>
+<th>Hiệu lực</th>
+<th>Trạng thái</th>
+<th>Xoá</th>
+</tr>
+</thead>
+<tbody id="list"></tbody>
+</table>
 
-<!-- OFFICER -->
-<div id="officer" class="page">
-    <h2>Quản lý quân nhân</h2>
-
-    <div class="card" id="addBox" style="display:none;">
-        <input id="name" placeholder="Họ tên">
-        <input id="rank" placeholder="Quân hàm">
-        <input id="level" placeholder="Mức kỷ luật (0-10)">
-        <input id="penalty" placeholder="Hình phạt (VD: Khiển trách)">
-        <button onclick="addOfficer()">Thêm / Kỷ luật</button>
-    </div>
-
-    <div class="card">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Tên</th>
-                    <th>Quân hàm</th>
-                    <th>Kỷ luật</th>
-                    <th>Vi phạm</th>
-                    <th>Hình phạt</th>
-                    <th>Trạng thái</th>
-                    <th>Hành động</th>
-                </tr>
-            </thead>
-            <tbody id="list"></tbody>
-        </table>
-    </div>
-</div>
-
-<!-- DISCIPLINE -->
-<div id="discipline" class="page">
-    <h2>Khung hình phạt kỷ luật</h2>
-
-    <div class="card">
-        <p class="good">0-3: Nhắc nhở / Không kỷ luật</p>
-        <p class="warn">4-6: Khiển trách / Cảnh cáo</p>
-        <p class="bad">7-10: Kỷ luật nặng / Giáng chức</p>
-    </div>
-</div>
-
-<!-- STATS -->
-<div id="stats" class="page">
-    <h2>Thống kê hệ thống</h2>
-
-    <div class="card">
-        <p>Tổng quân nhân: <span id="s1"></span></p>
-        <p>Tổng vi phạm: <span id="s2"></span></p>
-        <p>quân nhân kỷ luật nặng: <span id="s3"></span></p>
-    </div>
 </div>
 
 </div>
 
 <script>
 
-/* ===== ADMIN ===== */
-let isAdmin = false;
-const ADMIN_PASSWORD = "0848324066";
-
-/* LOGIN */
-function login(){
-    let p=document.getElementById("pass").value;
-
-    if(p===ADMIN_PASSWORD){
-        isAdmin=true;
-        document.getElementById("loginStatus").innerText="Đăng nhập thành công";
-        document.getElementById("addBox").style.display="block";
-        document.getElementById("adminStatus").innerText="ADMIN ACTIVE";
-    }else{
-        document.getElementById("loginStatus").innerText="Sai mật khẩu";
-    }
+/* ===== DỮ LIỆU GHI TRỰC TIẾP Ở ĐÂY ===== */
+let data = [
+{
+    name:"Nguyễn Văn A",
+    rank:"Thiếu úy",
+    level:2,
+    error:"Vi phạm nội quy",
+    penalty:"Nhắc nhở",
+    start:"2026-04-01",
+    end:"2026-04-10"
+},
+{
+    name:"Trần Văn B",
+    rank:"Trung úy",
+    level:8,
+    error:"Không chấp hành mệnh lệnh",
+    penalty:"Cảnh cáo",
+    start:"2026-04-05",
+    end:"2026-04-20"
 }
+];
 
-/* ===== CLASS ===== */
-class QuanNhan{
-    constructor(id,name,rank,level,violations,penalty){
-        this.id=id;
-        this.name=name;
-        this.rank=rank;
-        this.level=level;
-        this.violations=violations||0;
-        this.penalty=penalty||"";
-    }
-}
+/* ===== THÊM ===== */
+function add(){
 
-/* DATA */
-let officers=JSON.parse(localStorage.getItem("officers"))||[];
+    let o = {
+        name: name.value,
+        rank: rank.value,
+        level: parseFloat(level.value),
+        error: error.value,
+        penalty: penalty.value,
+        start: start.value,
+        end: end.value
+    };
 
-if(officers.length===0){
-    officers=[
-    ];
-}
-
-function save(){
-    localStorage.setItem("officers",JSON.stringify(officers));
-}
-
-/* CHUYỂN TRANG */
-function showPage(id){
-    document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
-    document.getElementById(id).classList.add("active");
-
+    data.push(o);
     render();
-    stats();
 }
 
-/* THÊM / KỶ LUẬT (ADMIN ONLY) */
-function addOfficer(){
-
-    if(!isAdmin){
-        alert("Chỉ ADMIN được thao tác");
-        return;
-    }
-
-    let name=document.getElementById("name").value;
-    let rank=document.getElementById("rank").value;
-    let level=parseFloat(document.getElementById("level").value);
-    let penalty=document.getElementById("penalty").value;
-
-    if(!name||!rank||isNaN(level)){
-        alert("Nhập đủ thông tin");
-        return;
-    }
-
-    officers.push(new QuanNhan(Date.now(),name,rank,level,1,penalty));
-
-    save();
+/* ===== XOÁ ===== */
+function remove(i){
+    data.splice(i,1);
     render();
-    stats();
 }
 
-/* TĂNG KỶ LUẬT */
-function increaseDiscipline(id){
-
-    if(!isAdmin){
-        alert("Chỉ ADMIN");
-        return;
-    }
-
-    officers=officers.map(o=>{
-        if(o.id===id){
-            o.level+=1;
-            o.violations+=1;
-        }
-        return o;
-    });
-
-    save();
-    render();
-    stats();
-}
-
-/* XOÁ */
-function removeOfficer(id){
-
-    if(!isAdmin){
-        alert("Chỉ ADMIN");
-        return;
-    }
-
-    officers=officers.filter(o=>o.id!==id);
-
-    save();
-    render();
-    stats();
-}
-
-/* RENDER */
+/* ===== HIỂN THỊ ===== */
 function render(){
-    let list=document.getElementById("list");
-    if(!list) return;
 
+    let list=document.getElementById("list");
     list.innerHTML="";
 
-    officers.forEach(o=>{
+    data.forEach((o,i)=>{
 
         let status =
             o.level>=7
@@ -309,46 +172,33 @@ function render(){
         <tr>
             <td>${o.name}</td>
             <td>${o.rank}</td>
-            <td>${o.level}/10</td>
-            <td>${o.violations}</td>
+            <td>${o.level}</td>
+            <td>${o.error}</td>
             <td>${o.penalty}</td>
+            <td>${o.start} → ${o.end}</td>
             <td>${status}</td>
-            <td>
-                ${isAdmin?`
-                <button onclick="increaseDiscipline(${o.id})">Kỷ luật +1</button>
-                <button onclick="removeOfficer(${o.id})">Xoá</button>
-                `:""}
-            </td>
+            <td><button onclick="remove(${i})">Xoá</button></td>
         </tr>
         `;
     });
 }
 
-/* STATS */
-function stats(){
-
-    let total=officers.length;
-    let totalV=officers.reduce((a,b)=>a+b.violations,0);
-    let heavy=officers.filter(o=>o.level>=7).length;
-
-    document.getElementById("total").innerText=total;
-    document.getElementById("totalViolations").innerText=totalV;
-
-    let s1=document.getElementById("s1");
-    let s2=document.getElementById("s2");
-    let s3=document.getElementById("s3");
-
-    if(s1){
-        s1.innerText=total;
-        s2.innerText=totalV;
-        s3.innerText=heavy;
-    }
-}
-
 render();
-stats();
 
 </script>
 
+<footer style="
+position:fixed;
+bottom:0;
+width:100%;
+text-align:center;
+padding:5px;
+font-size:12px;
+background:#020617;
+border-top:1px solid #1e293b;
+">
+© 2026 Military System | Owner: Thien Nguyen
+</footer>
+
 </body>
-                  </html>
+</html>
