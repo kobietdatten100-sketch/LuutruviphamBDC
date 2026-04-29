@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<title>Hệ thống kỷ luật quân nhân</title>
+<title>Hệ thống quản lý quân nhân</title>
 
 <style>
 body{
@@ -10,20 +10,35 @@ body{
     font-family:Arial;
     background:#0b1220;
     color:white;
+    display:flex;
 }
 
-.header{
+/* SIDEBAR */
+.sidebar{
+    width:230px;
     background:#020617;
+    height:100vh;
     padding:15px;
-    text-align:center;
-    font-weight:bold;
-    border-bottom:1px solid #1e293b;
+    border-right:1px solid #1e293b;
 }
 
-.container{
-    padding:20px;
+.sidebar h2{color:#38bdf8;}
+.sidebar button{
+    width:100%;
+    padding:10px;
+    margin-top:8px;
+    background:#0f172a;
+    color:white;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
 }
+.sidebar button:hover{background:#1e293b;}
 
+/* MAIN */
+.main{flex:1;padding:20px;}
+
+/* CARD */
 .card{
     background:#1e293b;
     padding:15px;
@@ -31,61 +46,83 @@ body{
     margin-bottom:15px;
 }
 
-input,button{
-    padding:10px;
-    margin:5px;
-    border:none;
-    border-radius:6px;
+/* GRID */
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+    gap:10px;
 }
 
-input{width:180px;}
-
+/* TABLE */
 .table{
     width:100%;
     border-collapse:collapse;
 }
-
 .table th,.table td{
     border:1px solid #334155;
     padding:8px;
     text-align:center;
 }
 
-.bad{color:red;}
-.warn{color:orange;}
+/* STATUS */
 .good{color:limegreen;}
+.warn{color:orange;}
+.bad{color:red;}
+
+input,select{
+    padding:8px;
+    margin:5px;
+    border:none;
+    border-radius:6px;
+}
+
+.page{display:none;}
+.active{display:block;}
 </style>
 </head>
 
 <body>
 
-<div class="header">
-HỆ THỐNG QUẢN LÝ KỶ LUẬT QUÂN NHÂN
+<div class="sidebar">
+<h2>QUẢN LÝ QĐ</h2>
+<button onclick="showPage('dashboard')">Dashboard</button>
+<button onclick="showPage('list')">Danh sách</button>
+<button onclick="showPage('rules')">Quy định</button>
 </div>
 
-<div class="container">
+<div class="main">
 
-<div class="card">
-<h3>Thêm kỷ luật</h3>
-
-<input id="name" placeholder="Họ tên">
-<input id="rank" placeholder="Quân hàm">
-<input id="level" placeholder="Mức kỷ luật (0-10)">
-<br>
-<input id="error" placeholder="Lỗi vi phạm">
-<input id="penalty" placeholder="Hình thức xử phạt">
-<br>
-<label>Từ:</label>
-<input type="date" id="start">
-<label>Đến:</label>
-<input type="date" id="end">
-<br>
-<button onclick="add()">Thêm</button>
+<!-- DASHBOARD -->
+<div id="dashboard" class="page active">
+<div class="grid">
+<div class="card">Tổng: <b id="total"></b></div>
+<div class="card">Nhẹ: <b id="light"></b></div>
+<div class="card">Trung: <b id="medium"></b></div>
+<div class="card">Nặng: <b id="heavy"></b></div>
 </div>
 
 <div class="card">
-<h3>Danh sách sĩ quan</h3>
+<h3>Phân loại kỷ luật</h3>
+<p class="good">0-3: Bình thường</p>
+<p class="warn">4-6: Cảnh cáo</p>
+<p class="bad">7-10: Nặng</p>
+</div>
+</div>
 
+<!-- LIST -->
+<div id="list" class="page">
+
+<div class="card">
+<input id="search" placeholder="Tìm tên..." onkeyup="render()">
+<select id="filter" onchange="render()">
+<option value="">Tất cả</option>
+<option value="light">Nhẹ</option>
+<option value="medium">Trung</option>
+<option value="heavy">Nặng</option>
+</select>
+</div>
+
+<div class="card">
 <table class="table">
 <thead>
 <tr>
@@ -93,14 +130,57 @@ HỆ THỐNG QUẢN LÝ KỶ LUẬT QUÂN NHÂN
 <th>Quân hàm</th>
 <th>Kỷ luật</th>
 <th>Lỗi</th>
-<th>Hình phạt</th>
 <th>Hiệu lực</th>
 <th>Trạng thái</th>
-<th>Xoá</th>
 </tr>
 </thead>
-<tbody id="list"></tbody>
+<tbody id="tbody"></tbody>
 </table>
+</div>
+
+</div>
+
+<!-- PROFILE -->
+<div id="profile" class="page">
+<div class="card">
+<h2>HỒ SƠ QUÂN NHÂN</h2>
+
+<p><b>Tên:</b> <span id="p_name"></span></p>
+<p><b>Quân hàm:</b> <span id="p_rank"></span></p>
+<p><b>Kỷ luật:</b> <span id="p_level"></span></p>
+<p><b>Lỗi:</b> <span id="p_error"></span></p>
+<p><b>Hình phạt:</b> <span id="p_penalty"></span></p>
+<p><b>Thời gian:</b> <span id="p_time"></span></p>
+<p><b>Trạng thái:</b> <span id="p_status"></span></p>
+
+<br>
+<button onclick="showPage('list')">← Quay lại</button>
+</div>
+</div>
+
+<!-- RULES -->
+<div id="rules" class="page">
+
+<div class="card">
+<h3>Các loại vi phạm</h3>
+<ul>
+<li>Vi phạm nội quy</li>
+<li>Không chấp hành mệnh lệnh</li>
+<li>Vắng mặt trái phép</li>
+<li>Gây mất đoàn kết</li>
+<li>Tiết lộ thông tin</li>
+</ul>
+</div>
+
+<div class="card">
+<h3>Luật chung</h3>
+<ul>
+<li>Chấp hành mệnh lệnh tuyệt đối</li>
+<li>Không rời đơn vị trái phép</li>
+<li>Tuân thủ điều lệnh quân đội</li>
+<li>Bảo mật thông tin</li>
+</ul>
+</div>
 
 </div>
 
@@ -108,96 +188,106 @@ HỆ THỐNG QUẢN LÝ KỶ LUẬT QUÂN NHÂN
 
 <script>
 
-/* ===== DỮ LIỆU GHI TRỰC TIẾP Ở ĐÂY ===== */
-let data = [
+/* DATA */
+let data=[
 {
-    name:"8rpigli",
-    rank:"Thiếu úy",
-    level:5,
-    error:"Vi phạm nội quy",
-    penalty:"giam quân hàm",
-    start:"2026-04-28",
-    end:"2026-05-28"
+name:"8rpigli",
+rank:"Thiếu úy",
+level:5,
+error:"Vi phạm nội quy",
+penalty:"Giam quân hàm",
+start:"2026-04-28",
+end:"2026-05-28"
 },
 {
-    name:"utkhoQuan4",
-    rank:"Trung sĩ",
-    level:8,
-    error:"vì phạm nội quy",
-    penalty:"giam quân hàm",
-    start:"2026-04-28",
-    end:"2026-05-28"
+name:"utkhoQuan4",
+rank:"Trung sĩ",
+level:5,
+error:"Vi phạm nội quy",
+penalty:"giam quân hàm",
+start:"2026-04-28",
+end:"2026-05-28"
 }
 ];
 
-/* ===== THÊM ===== */
-function add(){
-
-    let o = {
-        name: name.value,
-        rank: rank.value,
-        level: parseFloat(level.value),
-        error: error.value,
-        penalty: penalty.value,
-        start: start.value,
-        end: end.value
-    };
-
-    data.push(o);
-    render();
+/* PAGE */
+function showPage(id){
+document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+document.getElementById(id).classList.add("active");
 }
 
-/* ===== XOÁ ===== */
-function remove(i){
-    data.splice(i,1);
-    render();
+/* PROFILE */
+function viewProfile(i){
+let o=data[i];
+
+p_name.innerText=o.name;
+p_rank.innerText=o.rank;
+p_level.innerText=o.level+"/10";
+p_error.innerText=o.error;
+p_penalty.innerText=o.penalty;
+p_time.innerText=o.start+" → "+o.end;
+
+let s="";
+if(o.level>=7)s="NẶNG";
+else if(o.level>=4)s="CẢNH CÁO";
+else s="BÌNH THƯỜNG";
+
+p_status.innerText=s;
+
+showPage("profile");
 }
 
-/* ===== HIỂN THỊ ===== */
+/* RENDER */
 function render(){
 
-    let list=document.getElementById("list");
-    list.innerHTML="";
+let tbody=document.getElementById("tbody");
+if(!tbody) return;
 
-    data.forEach((o,i)=>{
+let search=document.getElementById("search").value.toLowerCase();
+let filter=document.getElementById("filter").value;
 
-        let status =
-            o.level>=7
-            ? '<span class="bad">NẶNG</span>'
-            : o.level>=4
-            ? '<span class="warn">CẢNH CÁO</span>'
-            : '<span class="good">BÌNH THƯỜNG</span>';
+tbody.innerHTML="";
 
-        list.innerHTML+=`
-        <tr>
-            <td>${o.name}</td>
-            <td>${o.rank}</td>
-            <td>${o.level}</td>
-            <td>${o.error}</td>
-            <td>${o.penalty}</td>
-            <td>${o.start} → ${o.end}</td>
-            <td>${status}</td>
-            <td><button onclick="remove(${i})">Xoá</button></td>
-        </tr>
-        `;
-    });
+data.forEach((o,i)=>{
+
+let type="";
+let status="";
+
+if(o.level>=7){type="heavy";status='<span class="bad">NẶNG</span>';}
+else if(o.level>=4){type="medium";status='<span class="warn">CẢNH CÁO</span>';}
+else{type="light";status='<span class="good">OK</span>';}
+
+if(search && !o.name.toLowerCase().includes(search)) return;
+if(filter && filter!==type) return;
+
+tbody.innerHTML+=`
+<tr>
+<td onclick="viewProfile(${i})" style="cursor:pointer;color:#38bdf8;">
+${o.name}
+</td>
+<td>${o.rank}</td>
+<td>${o.level}</td>
+<td>${o.error}</td>
+<td>${o.start} → ${o.end}</td>
+<td>${status}</td>
+</tr>
+`;
+});
+
+/* STATS */
+total.innerText=data.length;
+light.innerText=data.filter(x=>x.level<=3).length;
+medium.innerText=data.filter(x=>x.level>=4&&x.level<=6).length;
+heavy.innerText=data.filter(x=>x.level>=7).length;
+
 }
 
 render();
 
 </script>
 
-<footer style="
-position:fixed;
-bottom:0;
-width:100%;
-text-align:center;
-padding:5px;
-font-size:12px;
-background:#020617;
-border-top:1px solid #1e293b;
-">
-© 2026 Military BDC | Owner: Thien Nguyen
+<footer style="position:fixed;bottom:0;width:100%;text-align:center;padding:5px;font-size:12px;background:#020617;">
+© 2026 Military System | Owner: Thien Nguyen
 </footer>
 
 </body>
