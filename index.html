@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>HỆ THỐNG QUẢN LÝ HỆ SỐ LƯƠNG QUÂN NHÂN</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Roboto',sans-serif;
+}
+
+body{
+    background:#0b0f0b;
+    color:#d8e8d6;
+    overflow-x:hidden;
+}
+
+/* BACKGROUND */
+
+body::before{
+    content:'';
+    position:fixed;
+    width:100%;
+    height:100%;
+    background:
+    linear-gradient(rgba(0,0,0,.88),rgba(0,0,0,.92)),
+    url('https://images.unsplash.com/photo-1511884642898-4c92249e20b6?q=80&w=1920&auto=format&fit=crop');
+    background-size:cover;
+    background-position:center;
+    z-index:-2;
+}
+
+/* SCAN EFFECT */
+
+.scan-line{
+    position:fixed;
+    width:100%;
+    height:3px;
+    background:rgba(83,255,122,.18);
+    box-shadow:0 0 15px #53ff7a;
+    animation:scan 6s linear infinite;
+    z-index:-1;
+}
+
+@keyframes scan{
+    0%{top:-10px;}
+    100%{top:100%;}
+}
+
+/* HEADER */
+
+header{
+    padding:22px;
+    background:rgba(0,0,0,.58);
+    border-bottom:1px solid rgba(83,255,122,.15);
+    backdrop-filter:blur(6px);
+    position:sticky;
+    top:0;
+    z-index:999;
+}
+
+.header-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:20px;
+    flex-wrap:wrap;
+}
+
+.logo-section{
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+/* LOGO */
+
+.logo-img{
+    width:42px;
+    height:42px;
+    object-fit:contain;
+    border-radius:50%;
+    background:rgba(83,255,122,.05);
+    padding:4px;
+    border:1px solid rgba(83,255,122,.15);
+    box-shadow:0 0 10px rgba(83,255,122,.12);
+}
+
+/* TITLE */
+
+.title h1{
+    color:#83ff9f;
+    font-size:28px;
+    letter-spacing:.5px;
+}
+
+.title p{
+    color:#93a693;
+    margin-top:4px;
+    font-size:14px;
+}
+
+/* STATUS */
+
+.system-status{
+    display:flex;
+    gap:15px;
+    flex-wrap:wrap;
+}
+
+.status-box{
+    background:rgba(83,255,122,.05);
+    border:1px solid rgba(83,255,122,.12);
+    padding:10px 18px;
+    border-radius:12px;
+    min-width:150px;
+}
+
+.status-box span{
+    display:block;
+    margin-top:5px;
+    color:#82ff9f;
+    font-weight:700;
+}
+
+/* MARQUEE */
+
+.marquee{
+    margin-top:18px;
+    overflow:hidden;
+    border:1px solid rgba(83,255,122,.12);
+    border-radius:10px;
+    background:rgba(83,255,122,.04);
+    padding:10px;
+}
+
+.marquee p{
+    white-space:nowrap;
+    display:inline-block;
+    animation:marquee 18s linear infinite;
+    color:#bfffcf;
+}
+
+@keyframes marquee{
+    from{transform:translateX(100%);}
+    to{transform:translateX(-100%);}
+}
+
+/* CONTAINER */
+
+.container{
+    width:95%;
+    max-width:1400px;
+    margin:auto;
+    padding:30px 0;
+}
+
+/* DASHBOARD */
+
+.dashboard{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+    gap:18px;
+    margin-bottom:35px;
+}
+
+.card{
+    background:rgba(6,16,7,.82);
+    border:1px solid rgba(83,255,122,.12);
+    border-radius:18px;
+    padding:22px;
+    transition:.3s;
+    position:relative;
+    overflow:hidden;
+}
+
+.card::before{
+    content:'';
+    position:absolute;
+    width:100%;
+    height:2px;
+    top:0;
+    left:-100%;
+    background:#53ff7a;
+    animation:led 4s linear infinite;
+}
+
+@keyframes led{
+    0%{left:-100%;}
+    100%{left:100%;}
+}
+
+.card:hover{
+    transform:translateY(-5px);
+    border-color:#53ff7a;
+    box-shadow:0 0 20px rgba(83,255,122,.12);
+}
+
+.card h3{
+    color:#82ff9f;
+    margin-bottom:12px;
+}
+
+.card .value{
+    font-size:30px;
+    font-weight:700;
+}
+
+/* TITLE */
+
+.section-title{
+    margin:35px 0 20px;
+    border-left:4px solid #53ff7a;
+    padding-left:14px;
+    color:#82ff9f;
+    font-size:24px;
+}
+
+/* TABLE */
+
+.table-wrapper{
+    overflow-x:auto;
+    border-radius:18px;
+    border:1px solid rgba(83,255,122,.12);
+    background:rgba(6,16,7,.82);
+}
+
+.table-header{
+    padding:18px;
+    border-bottom:1px solid rgba(83,255,122,.08);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:12px;
+}
+
+.search-box input{
+    width:260px;
+    padding:12px 15px;
+    background:#101710;
+    border:1px solid rgba(83,255,122,.12);
+    border-radius:10px;
+    color:#fff;
+    outline:none;
+}
+
+.search-box input:focus{
+    border-color:#53ff7a;
+}
+
+.table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+.table th,
+.table td{
+    padding:16px;
+    text-align:left;
+    border-bottom:1px solid rgba(255,255,255,.04);
+}
+
+.table th{
+    background:rgba(83,255,122,.06);
+    color:#8cffaa;
+}
+
+.table tr:hover{
+    background:rgba(83,255,122,.04);
+}
+
+/* BADGE */
+
+.rank-badge{
+    display:inline-block;
+    padding:6px 12px;
+    border-radius:999px;
+    background:rgba(83,255,122,.08);
+    border:1px solid rgba(83,255,122,.12);
+    color:#aaffbe;
+    font-size:13px;
+}
+
+/* FOOTER */
+
+footer{
+    margin-top:45px;
+    padding:22px;
+    text-align:center;
+    border-top:1px solid rgba(83,255,122,.08);
+    background:rgba(0,0,0,.5);
+    color:#8f9f8f;
+}
+
+/* CLOCK */
+
+.clock{
+    color:#82ff9f;
+    font-weight:700;
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+    body{
+        font-size:14px;
+    }
+
+    header{
+        padding:18px;
+    }
+
+    .header-top{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    .title h1{
+        font-size:18px;
+        line-height:1.4;
+    }
+
+    .title p{
+        font-size:12px;
+    }
+
+    .logo-img{
+        width:34px;
+        height:34px;
+    }
+
+    .system-status{
+        width:100%;
+        display:grid;
+        grid-template-columns:1fr;
+    }
+
+    .status-box{
+        width:100%;
+        min-width:unset;
+        font-size:13px;
+    }
+
+    .dashboard{
+        grid-template-columns:1fr;
+    }
+
+    .card{
+        padding:18px;
+    }
+
+    .card .value{
+        font-size:24px;
+    }
+
+    .section-title{
+        font-size:20px;
+    }
+
+    .table{
+        min-width:700px;
+    }
+
+    .table th,
+    .table td{
+        font-size:12px;
+        white-space:nowrap;
+        padding:11px;
+    }
+
+    .search-box input{
+        width:100%;
+    }
+
+    footer{
+        font-size:12px;
+        line-height:1.6;
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="scan-line"></div>
+
+<header>
+
+<div class="header-top">
+
+<div class="logo-section">
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/6/6a/Logo_Q%C4%90NDVN.png"
+alt="Logo"
+class="logo-img">
+
+<div class="title">
+<h1>HỆ THỐNG QUẢN LÝ HỆ SỐ LƯƠNG QUÂN NHÂN</h1>
+<p>Dữ liệu tham khảo cấp bậc và hệ số lương quân đội</p>
+</div>
+
+</div>
+
+<div class="system-status">
+
+<div class="status-box">
+Trạng thái hệ thống
+<span>ĐANG HOẠT ĐỘNG</span>
+</div>
+
+<div class="status-box">
+Cập nhật dữ liệu
+<span>29/05/2026</span>
+</div>
+
+<div class="status-box">
+Giờ hệ thống
+<span class="clock" id="clock">00:00:00</span>
+</div>
+
+</div>
+
+</div>
+
+<div class="marquee">
+<p>
+THÔNG BÁO: HỆ THỐNG QUẢN LÝ LƯƠNG QUÂN NHÂN ĐANG HOẠT ĐỘNG ỔN ĐỊNH • DỮ LIỆU MANG TÍNH THAM KHẢO • BẢO MẬT NỘI BỘ
+</p>
+</div>
+
+</header>
+
+<div class="container">
+
+<div class="dashboard">
+
+<div class="card">
+<h3>Tổng cấp bậc</h3>
+<div class="value">17</div>
+</div>
+
+<div class="card">
+<h3>Hệ số cao nhất</h3>
+<div class="value">10.40</div>
+</div>
+
+<div class="card">
+<h3>Hệ số thấp nhất</h3>
+<div class="value">3.20</div>
+</div>
+
+<div class="card">
+<h3>Tình trạng dữ liệu</h3>
+<div class="value">ỔN ĐỊNH</div>
+</div>
+
+</div>
+
+<h2 class="section-title">BẢNG HỆ SỐ LƯƠNG QUÂN NHÂN</h2>
+
+<div class="table-wrapper">
+
+<div class="table-header">
+
+<strong>Danh sách cấp bậc và hệ số lương</strong>
+
+<div class="search-box">
+<input type="text" id="searchInput" placeholder="Tìm kiếm cấp bậc...">
+</div>
+
+</div>
+
+<table class="table" id="salaryTable">
+
+<thead>
+
+<tr>
+<th>STT</th>
+<th>Cấp bậc</th>
+<th>Nhóm quân hàm</th>
+<th>Hệ số lương</th>
+<th>Lương cơ bản</th>
+<th>Tình trạng</th>
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td>N/A</td>
+<td>STCMC</td>
+<td><span class="rank-badge">Vua Tuất</span></td>
+<td>67</td>
+<td>1.369.677.036 VNĐ</td>
+<td>Đang phục vụ</td>
+</tr>
+
+<tr>
+<td>N/A</td>
+<td>CIC</td>
+<td><span class="rank-badge">Tuất vương</span></td>
+<td>36</td></td>
+<td>1.366.360.677 VNĐ</td>
+<td>Đang phục vụ</td>
+</tr>
+
+<tr>
+<td>01</td>
+<td>Đại tướng</td>
+<td><span class="rank-badge">Sĩ quan cấp cao</span></td>
+<td>10.40</td>
+<td>24.336.000 VNĐ</td>
+<td>Đang phục vụ</td>
+</tr>
+
+<tr>
+<td>02</td>
+<td>Thượng tướng</td>
+<td><span class="rank-badge">Sĩ quan cấp cao</span></td>
+<td>9.80</td>
+<td>22.932.000 VNĐ</td>
+<td>Đang phục vụ</td>
+</tr>
+
+<tr>
+<td>03</td>
+<td>Trung tướng</td>
+<td><span class="rank-badge">Sĩ quan cấp cao</span></td>
+<td>9.20</td>
+<td>21.528.000 VNĐ</td>
+<td>Đang phục vụ</td>
+</tr>
+
+<tr>
+<td>04</td>
+<td>Thiếu tướng</td>
+<td><span class="rank-badge">Sĩ quan cấp cao</span></td>
+<td>8.60</td>
+<td>20.124.000 VNĐ</td>
+<td>Đang phục vụ</td>
+</tr>
+
+<tr>
+<td>05</td>
+<td>Đại tá</td>
+<td><span class="rank-badge">Sĩ quan</span></td>
+<td>8.00</td>
+<td>18.720.000 VNĐ</td>
+<td>Đang phục vụ</td>
+</tr>
+
+<tr>
+<td>06</td>
+<td>Thượng tá</td>
+<td><span class="rank-badge">Sĩ quan</span></td>
+<td>7.30</td>
+<td>17.082.000 VNĐ</td>
+<td>Đang phục vụ</td>
+</tr>
+
+<tr>
+<td>07</td>
+<td>Trung tá</td>
+<td><span class="rank-badge">Sĩ quan</span></td>
+<td>6.60</td>
+<td>15.444.000 VNĐ</td>
+<td>Đang phục vụ</td>
+</tr>
+
+<tr>
+<td>08</td>
+<td>Thiếu tá</td>
+<td><span class="rank-badge">Sĩ quan</span></td>
+<td>6.00</td>
+<td>14.040.000 VNĐ</td>
+<td>Đang phục vụ</td>
+</tr>
+
+<tr>
+<td>09</td>
+<td>Đại úy</td>
+<td><span class="rank-badge">Sĩ quan</span></td>
+<td>5.40</td>
+<td>12.636.000 VNĐ</td>
+<td>Đang phục vụ</td>
+</tr>
+
+<tr>
+<td>10</td>
+<td>Thượng úy</td>
+<td><span class="rank-badge">Sĩ quan</span></td>
+<td>5.00</td>
+<td>11.700.000 VNĐ</td>
+<td>Đang phục vụ</td>
+</tr>
+
+<tr>
+<td>11</td>
+<td>Trung úy</td>
+<td><span class="rank-badge">Sĩ quan</span></td>
+<td>4.60</td>
+<td>10.764.000 VNĐ</td>
+<td>Đang phục vụ</td>
+</tr>
+
+<tr>
+<td>12</td>
+<td>Thiếu úy</td>
+<td><span class="rank-badge">Sĩ quan</span></td>
+<td>4.20</td>
+<td>9.828.000 VNĐ</td>
+<td>Đang phục vụ</td>
+</tr>
+
+<tr>
+<td>13</td>
+<td>Thượng sĩ</td>
+<td><span class="rank-badge">Hạ sĩ quan</span></td>
+<td>3.80</td>
+<td>8.892.000 VNĐ</td>
+<td>Đang phục vụ</td>
+</tr>
+
+<tr>
+<td>14</td>
+<td>Trung sĩ</td>
+<td><span class="rank-badge">Hạ sĩ quan</span></td>
+<td>3.60</td>
+<td>8.424.000 VNĐ</td>
+<td>Đang phục vụ</td>
+</tr>
+
+<tr>
+<td>15</td>
+<td>Hạ sĩ</td>
+<td><span class="rank-badge">Hạ sĩ quan</span></td>
+<td>3.40</td>
+<td>7.956.000 VNĐ</td>
+<td>Đang phục vụ</td>
+</tr>
+
+<tr>
+<td>16</td>
+<td>Binh nhất</td>
+<td><span class="rank-badge">Chiến sĩ</span></td>
+<td>3.30</td>
+<td>7.722.000 VNĐ</td>
+<td>Đang phục vụ</td>
+</tr>
+
+<tr>
+<td>17</td>
+<td>Binh nhì</td>
+<td><span class="rank-badge">Chiến sĩ</span></td>
+<td>3.20</td>
+<td>7.488.000 VNĐ</td>
+<td>Đang phục vụ</td>
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<footer>
+HỆ THỐNG THÔNG TIN QUÂN NHÂN • @ K 
+</footer>
+
+<script>
+
+/* CLOCK */
+
+function updateClock(){
+
+    const now = new Date();
+
+    const h = String(now.getHours()).padStart(2,'0');
+    const m = String(now.getMinutes()).padStart(2,'0');
+    const s = String(now.getSeconds()).padStart(2,'0');
+
+    document.getElementById('clock').innerText = `${h}:${m}:${s}`;
+
+}
+
+setInterval(updateClock,1000);
+
+updateClock();
+
+/* SEARCH */
+
+const searchInput = document.getElementById('searchInput');
+
+const rows = document.querySelectorAll('#salaryTable tbody tr');
+
+searchInput.addEventListener('keyup',function(){
+
+    const value = this.value.toLowerCase();
+
+    rows.forEach(row=>{
+
+        const text = row.innerText.toLowerCase();
+
+        row.style.display = text.includes(value)
+        ? ''
+        : 'none';
+
+    });
+
+});
+
+/* CARD EFFECT */
+
+const cards = document.querySelectorAll('.card');
+
+cards.forEach(card=>{
+
+    card.addEventListener('mousemove',e=>{
+
+        const x = e.offsetX;
+        const y = e.offsetY;
+
+        card.style.background =
+        `radial-gradient(circle at ${x}px ${y}px,
+        rgba(83,255,122,.12),
+        rgba(6,16,7,.82))`;
+
+    });
+
+    card.addEventListener('mouseleave',()=>{
+
+        card.style.background =
+        'rgba(6,16,7,.82)';
+
+    });
+
+});
+
+</script>
+
+</body>
+</html>
