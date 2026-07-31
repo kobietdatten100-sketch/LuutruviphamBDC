@@ -257,5 +257,34 @@ wave.remove();
 // =====================================
 // HSR COPYRIGHT
 // =====================================
+(function () {
 
+    console.log("%cHSR | Hồ Chí Minh Roleplay",
+        "color:#FFD700;font-size:22px;font-weight:bold;");
 
+    console.log("%c© 2026 HSR And raumaxayy36. All Rights Reserved.",
+        "color:#ff4444;font-size:14px;");
+
+    // Chặn chuột phải
+    document.addEventListener("contextmenu", function(e){
+        e.preventDefault();
+    });
+
+    // Chặn một số phím tắt
+    document.addEventListener("keydown", function(e){
+
+        if(e.key === "F12"){
+            e.preventDefault();
+        }
+
+        if(e.ctrlKey && e.shiftKey && ["I","J","C"].includes(e.key.toUpperCase())){
+            e.preventDefault();
+        }
+
+        if(e.ctrlKey && e.key.toUpperCase() === "U"){
+            e.preventDefault();
+        }
+
+    });
+
+})();
