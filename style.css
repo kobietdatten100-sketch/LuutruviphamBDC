@@ -440,3 +440,20 @@ footer{
     opacity: 0.8;
     margin: 6px;
 }
+.footer {
+    background: #0b1120;
+    color: white;
+    padding: 30px;
+    text-align: center;
+    font-family: Arial, sans-serif;
+}
+
+.footer h3 {
+    margin-bottom: 10px;
+    letter-spacing: 2px;
+}
+
+.footer p {
+    opacity: 0.8;
+    margin: 6px;
+        }
