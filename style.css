@@ -457,3 +457,30 @@ footer{
     opacity: 0.8;
     margin: 6px;
         }
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+
+.footer {
+    background: #0b1120;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    margin-top: auto;
+    font-size: 14px;
+}
+
+.footer p {
+    margin: 5px;
+}
