@@ -1311,6 +1311,35 @@ opacity:0;
 
 }
 /* ==========================
+   COPYRIGHT
+========================== */
+
+.copyright{
+
+margin-top:60px;
+
+padding:25px;
+
+text-align:center;
+
+background:#111;
+
+color:#bbb;
+
+font-size:14px;
+
+border-top:2px solid #FFD700;
+
+line-height:1.8;
+
+}
+
+.copyright b{
+
+color:#FFD700;
+
+}
+/* ==========================
    LAW CARD
 ========================== */
 
@@ -1399,34 +1428,5 @@ font-size:16px;
 line-height:1.8;
 
 }
-
-}
-/* ==========================
-   COPYRIGHT
-========================== */
-
-.copyright{
-
-margin-top:60px;
-
-padding:25px;
-
-text-align:center;
-
-background:#111;
-
-color:#bbb;
-
-font-size:14px;
-
-border-top:2px solid #FFD700;
-
-line-height:1.8;
-
-}
-
-.copyright b{
-
-color:#FFD700;
 
 }
