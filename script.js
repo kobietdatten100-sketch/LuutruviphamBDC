@@ -131,33 +131,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 // ==========================
-// LOADING SCREEN
+// SAFE LOADING SCREEN
 // ==========================
 
 window.addEventListener("load", () => {
-    
+
     const loading = document.getElementById("loading-screen");
-    
-    const progress = document.querySelector(".loading-progress");
-    
-    if (progress) {
-        
-        progress.style.width = "100%";
-        
-    }
-    
-    setTimeout(() => {
-        
+
+    if (loading) {
+
         loading.style.opacity = "0";
-        
+
         setTimeout(() => {
-            
-            loading.style.display = "none";
-            
-        }, 700);
-        
-    }, 1800);
-    
+            loading.remove();
+        }, 500);
+
+    }
+
 });
 
 
