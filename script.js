@@ -255,6 +255,306 @@ wave.remove();
 
 });
 // =====================================
+// PLAYER COUNT DEMO
+// =====================================
+
+let players = 120;
+
+const playerElement = document.getElementById("player-count");
+
+if(playerElement){
+
+    playerElement.innerHTML = players;
+
+    setInterval(()=>{
+
+        players += Math.floor(Math.random()*3)-1;
+
+        if(players<100) players=100;
+
+        if(players>150) players=150;
+
+        playerElement.innerHTML = players;
+
+    },5000);
+
+}
+// ================================
+// AUTO FORMAT RULES
+// ================================
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    // Tìm tất cả tiêu đề Điều
+    const titles = document.querySelectorAll("h2,h3");
+
+    titles.forEach(title => {
+
+        if (title.textContent.trim().startsWith("Điều")) {
+
+            title.style.color = "#FFD700";
+            title.style.fontSize = "30px";
+            title.style.marginTop = "35px";
+            title.style.marginBottom = "12px";
+            title.style.fontWeight = "700";
+            title.style.borderLeft = "5px solid #FFD700";
+            title.style.paddingLeft = "12px";
+
+            let p = title.nextElementSibling;
+
+            if (p && p.tagName === "P") {
+
+                p.style.fontSize = "17px";
+                p.style.lineHeight = "1.9";
+                p.style.color = "#E5E5E5";
+                p.style.marginBottom = "25px";
+                p.style.textAlign = "justify";
+
+            }
+
+        }
+
+    });
+
+});
+// ==========================
+// VISITOR COUNTER
+// ==========================
+
+let count = localStorage.getItem("visitorCount");
+
+if (!count) {
+    count = 1;
+} else {
+    count = parseInt(count) + 1;
+}
+
+localStorage.setItem("visitorCount", count);
+
+const counter = document.getElementById("visitor-count");
+if (counter) {
+    counter.textContent = count;
+}    
+    
+    // ==========================
+    // BACK TO TOP
+    // ==========================
+    
+    const backToTop = document.getElementById("backToTop");
+    
+    window.addEventListener("scroll", () => {
+        
+        if (window.scrollY > 300) {
+            
+            backToTop.style.display = "block";
+            
+        } else {
+            
+            backToTop.style.display = "none";
+            
+        }
+        
+    });
+    
+    backToTop.addEventListener("click", () => {
+        
+        window.scrollTo({
+            
+            top: 0,
+            
+            behavior: "smooth"
+            
+        });
+        
+    });
+    
+    
+    // ==========================
+    // HEADER EFFECT
+    // ==========================
+    
+    const header = document.querySelector("header");
+    
+    window.addEventListener("scroll", () => {
+        
+        if (window.scrollY > 40) {
+            
+            header.style.background = "rgba(20,20,20,.92)";
+            header.style.boxShadow = "0 0 25px rgba(255,0,0,.35)";
+            
+        } else {
+            
+            header.style.background = "rgba(20,20,20,.65)";
+            header.style.boxShadow = "none";
+            
+        }
+        
+    });
+    
+    
+    // ==========================
+    // CARD ANIMATION
+    // ==========================
+    
+    const cards = document.querySelectorAll(".card");
+    
+    const observer = new IntersectionObserver((entries) => {
+        
+        entries.forEach(entry => {
+            
+            if (entry.isIntersecting) {
+                
+                entry.target.style.opacity = "1";
+                entry.target.style.transform = "translateY(0)";
+                
+            }
+            
+        });
+        
+    }, {
+        
+        threshold: .15
+        
+    });
+    
+    cards.forEach(card => {
+        
+        card.style.opacity = "0";
+        card.style.transform = "translateY(50px)";
+        card.style.transition = ".7s";
+        
+        observer.observe(card);
+        
+    });
+    
+});
+
+
+// ==========================
+// LOADING SCREEN
+// ==========================
+
+window.addEventListener("load", () => {
+    
+    const loading = document.getElementById("loading-screen");
+    
+    const progress = document.querySelector(".loading-progress");
+    
+    if (progress) {
+        
+        progress.style.width = "100%";
+        
+    }
+    
+    setTimeout(() => {
+        
+        loading.style.opacity = "0";
+        
+        setTimeout(() => {
+            
+            loading.style.display = "none";
+            
+        }, 700);
+        
+    }, 1800);
+    
+});
+
+
+// ==========================
+// DIGITAL CLOCK
+// ==========================
+
+function updateClock() {
+    
+    const now = new Date();
+    
+    const h = String(now.getHours()).padStart(2, "0");
+    const m = String(now.getMinutes()).padStart(2, "0");
+    const s = String(now.getSeconds()).padStart(2, "0");
+    
+    const clock = document.getElementById("clock");
+    
+    if (clock) {
+        
+        clock.innerHTML = h + ":" + m + ":" + s;
+        
+    }
+    
+}
+
+setInterval(updateClock, 1000);
+updateClock();
+
+
+// ==========================
+// PAGE FADE
+// ==========================
+
+window.onpageshow = function() {
+    
+    document.body.style.opacity = "1";
+    
+};
+
+document.body.style.opacity = "0";
+document.body.style.transition = ".5s";
+// =====================================
+// SCROLL PROGRESS BAR
+// =====================================
+
+const progressBar=document.getElementById("progress-bar");
+
+window.addEventListener("scroll",()=>{
+
+const totalHeight=
+document.documentElement.scrollHeight-
+window.innerHeight;
+
+const progress=
+(window.pageYOffset/totalHeight)*100;
+
+progressBar.style.width=progress+"%";
+
+});
+// =====================================
+// CURSOR GLOW
+// =====================================
+
+const glow=document.getElementById("cursor-glow");
+
+document.addEventListener("mousemove",(e)=>{
+
+glow.style.opacity="1";
+
+glow.style.left=e.clientX+"px";
+
+glow.style.top=e.clientY+"px";
+
+});
+
+document.addEventListener("touchstart",(e)=>{
+
+const touch=e.touches[0];
+
+const wave=document.createElement("div");
+
+wave.className="touch-effect";
+
+wave.style.left=touch.clientX+"px";
+
+wave.style.top=touch.clientY+"px";
+
+document.body.appendChild(wave);
+
+setTimeout(()=>{
+
+wave.remove();
+
+},800);
+
+});
+// =====================================
 // HSR COPYRIGHT
 // =====================================
 (function () {
